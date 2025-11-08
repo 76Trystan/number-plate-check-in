@@ -70,7 +70,7 @@ The MVP focuses on delivering the **core functionality** required to demonstrate
 - Introduce confidence scoring and adaptive OCR tuning.
 - Add multi-camera and multi-location support.
 - Deploy system using Docker or Kubernetes for scalability.
-- Add analytics dashboard (e.g., occupancy trends, peak times).
+- Add analytics dashboard (e.g. peak times).
 
 **Outcome:** Fully scalable and production-ready ANPR solution for valet and parking services.
 
@@ -78,7 +78,7 @@ The MVP focuses on delivering the **core functionality** required to demonstrate
 
 ### **Phase 5: Commercial Deployment & Maintenance**
 **Goal:** Prepare for production environments.
-- Optimize for cloud deployment (AWS, Azure, or GCP).
+- Optimize for cloud deployment (AWS or Azure).
 - Add continuous monitoring and alerting.
 - Conduct field testing and accuracy benchmarking.
 - Finalize documentation and maintenance procedures.
