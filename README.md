@@ -99,7 +99,7 @@ The MVP focuses on delivering the **core functionality** required to demonstrate
 
 ## About Me
 
-My Name is Trystan, I am currently studying to become a software engineer. During my studies I work part time at a very busy valet service, over the years of working there, the company in charge has always tried various methods to create a fast an efficient environment for both customer and attendant (my role). However, with each attempt, they have never full addressed the efficienty side of things. This project is designed to address all user/customer requirements for a fully functional and efficient check in system.
+My Name is Trystan, I am currently studying to become a software engineer. During my studies I work part time at a very busy valet, over the years of working there, the company in charge has always tried various methods to create a fast an efficient environment for both customer and attendant . However, with each attempt, they have never full addressed the efficienty side of things. This project is designed to address all user/customer requirements for a fully functional and efficient check in system.
 
 ---
 
