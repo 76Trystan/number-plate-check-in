@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Valet Check-In Dashboard</title>
 
   <!-- Libraries -->
@@ -48,6 +48,43 @@
       gap: 30px;
     }
 
+    /* Scrollable table for current vehicles */
+    .current-vehicles-table {
+      max-height: 300px;
+      overflow-y: auto;
+      background: var(--card-bg);
+      border-radius: var(--radius);
+      box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    th, td {
+      padding: 12px 14px;
+      border-bottom: 1px solid var(--border);
+      text-align: left;
+      font-size: 0.95em;
+    }
+
+    th {
+      background: var(--primary);
+      color: white;
+      position: sticky;
+      top: 0;
+    }
+
+    tr:nth-child(even) td {
+      background: #f9f9f9;
+    }
+
+    tr:hover td {
+      background: #eef5ff;
+    }
+
+    /* Summary Cards */
     .summary {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
@@ -80,6 +117,7 @@
       font-size: 0.9em;
     }
 
+    /* Chart Container */
     .chart-container {
       background: var(--card-bg);
       border-radius: var(--radius);
@@ -90,155 +128,139 @@
     .chart-container h3 {
       margin-bottom: 10px;
     }
-
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      background: var(--card-bg);
-      border-radius: var(--radius);
-      overflow: hidden;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.08);
-    }
-
-    th, td {
-      padding: 12px 14px;
-      border-bottom: 1px solid var(--border);
-      text-align: left;
-    }
-
-    th {
-      background: var(--primary);
-      color: white;
-    }
-
-    tr:nth-child(even) td {
-      background: #f9f9f9;
-    }
-
-    tr:hover td {
-      background: #eef5ff;
-    }
-
-    @media (max-width: 700px) {
-      table, thead, tbody, th, td, tr {
-        display: block;
-      }
-      th {
-        display: none;
-      }
-      td {
-        display: flex;
-        justify-content: space-between;
-        border: none;
-        border-bottom: 1px solid var(--border);
-      }
-      td::before {
-        content: attr(data-label);
-        font-weight: bold;
-        color: var(--text-light);
-      }
-    }
   </style>
 </head>
 <body>
-  <header>Valet Check-In Dashboard</header>
 
-  <main>
-    <section class="summary">
-      <div class="card">
-        <p>Total Vehicles</p>
-        <h2 id="total-count">-</h2>
-      </div>
-      <div class="card">
-        <p>Average Check-in Delay (mins)</p>
-        <h2 id="avg-checkin-delay">-</h2>
-      </div>
-      <div class="card">
-        <p>Average Checkout Delay (mins)</p>
-        <h2 id="avg-checkout-delay">-</h2>
-      </div>
-      <div class="card">
-        <p>Longest Overstay (mins)</p>
-        <h2 id="max-overstay">-</h2>
-      </div>
-    </section>
+<header>Valet Check-In Dashboard</header>
 
-    <section class="chart-container">
-      <h3>Check-in Delay by Vehicle</h3>
-      <canvas id="delayChart"></canvas>
-    </section>
+<main>
 
-    <section>
-      <h3>Detailed Valet Records</h3>
-      <table id="data-table">
-        <thead></thead>
-        <tbody></tbody>
+  <!-- Currently Checked In Vehicles -->
+  <section>
+    <h3>Currently Checked In Vehicles</h3>
+    <div class="current-vehicles-table">
+      <table id="current-vehicles-table">
+        <thead>
+          <tr>
+            <th>License Plate</th>
+            <th>Booked Check-In</th>
+            <th>Actual Check-In</th>
+            <th>Scheduled Checkout</th>
+            <th>Duration</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- Data will be inserted here -->
+        </tbody>
       </table>
-    </section>
-  </main>
+    </div>
+  </section>
 
-  <script>
-    function minutesDiff(start, end) {
-      return (new Date(end) - new Date(start)) / 60000;
-    }
+  <!-- Summary Cards -->
+  <section class="summary">
+    <div class="card">
+      <p>Total Vehicles Currently Checked In</p>
+      <h2 id="total-current">0</h2>
+    </div>
+    <div class="card">
+      <p>Total Check-Ins</p>
+      <h2 id="total-checkins">0</h2>
+    </div>
+    <div class="card">
+      <p>Total Check-Outs</p>
+      <h2 id="total-checkouts">0</h2>
+    </div>
+  </section>
 
-    Papa.parse("../data/data.csv", {
-      download: true,
-      header: true,
-      complete: function(results) {
-        const data = results.data.filter(r => r["License Plate"]);
-        const headers = Object.keys(data[0]);
-        const tableHead = document.querySelector("#data-table thead");
-        const tableBody = document.querySelector("#data-table tbody");
+  <!-- Check-ins Chart -->
+  <section class="chart-container">
+    <h3>Check-Ins Over Last 7 Days</h3>
+    <canvas id="checkinsChart"></canvas>
+  </section>
 
-        // Table headers
-        tableHead.innerHTML = "<tr>" + headers.map(h => `<th>${h}</th>`).join('') + "</tr>";
+</main>
 
-        // Compute stats
-        const checkinDiffs = data.map(d => minutesDiff(d["Booked Checkin Time"], d["Actual Checkin Time"]));
-        const checkoutDiffs = data.map(d => minutesDiff(d["Scheduled Checkout Time"], d["Actual Checkout Time"]));
+<script>
+  const csvPath = "../data/test_data.csv"; // Update path if needed
 
-        const avgCheckin = (checkinDiffs.reduce((a,b)=>a+b,0)/checkinDiffs.length).toFixed(1);
-        const avgCheckout = (checkoutDiffs.reduce((a,b)=>a+b,0)/checkoutDiffs.length).toFixed(1);
-        const maxOverstay = Math.max(...checkoutDiffs).toFixed(1);
+  // Function to calculate duration between check-in and now in M:H:D:W:M
+  function calculateDuration(checkinTime) {
+    const start = new Date(checkinTime);
+    const now = new Date();
+    const diff = now - start; // milliseconds
+    const minutes = Math.floor(diff / 60000);
+    const hours = Math.floor(minutes / 60);
+    const days = Math.floor(hours / 24);
+    const weeks = Math.floor(days / 7);
+    const months = Math.floor(days / 30);
+    return `${minutes}:${hours}:${days}:${weeks}:${months}`;
+  }
 
-        document.getElementById("total-count").textContent = data.length;
-        document.getElementById("avg-checkin-delay").textContent = avgCheckin;
-        document.getElementById("avg-checkout-delay").textContent = avgCheckout;
-        document.getElementById("max-overstay").textContent = maxOverstay;
+  Papa.parse(csvPath, {
+    download: true,
+    header: true,
+    complete: function(results) {
+      const data = results.data.filter(d => d["License Plate"]);
 
-        // Populate table
-        tableBody.innerHTML = data.map(row => {
-          return "<tr>" + headers.map(h => `<td data-label="${h}">${row[h]}</td>`).join('') + "</tr>";
-        }).join('');
+      // Currently checked-in vehicles
+      const currentVehicles = data.filter(d => !d["Actual Checkout Time"]);
+      const tbody = document.querySelector("#current-vehicles-table tbody");
+      tbody.innerHTML = currentVehicles.map(d => `
+        <tr>
+          <td>${d["License Plate"]}</td>
+          <td>${d["Booked Checkin Time"] || "-"}</td>
+          <td>${d["Actual Checkin Time"] || "-"}</td>
+          <td>${d["Scheduled Checkout Time"] || "-"}</td>
+          <td>${calculateDuration(d["Actual Checkin Time"])}</td>
+        </tr>
+      `).join('');
 
-        // Chart
-        const ctx = document.getElementById('delayChart');
-        new Chart(ctx, {
-          type: 'bar',
-          data: {
-            labels: data.map(d => d["License Plate"]),
-            datasets: [{
-              label: 'Check-in Delay (mins)',
-              data: checkinDiffs,
-              backgroundColor: '#007bff88',
-              borderColor: '#007bff',
-              borderWidth: 1
-            }]
-          },
-          options: {
-            responsive: true,
-            scales: {
-              y: { beginAtZero: true, title: { display: true, text: "Delay (minutes)" } },
-              x: { title: { display: true, text: "License Plate" } }
-            }
-          }
-        });
-      },
-      error: function(err) {
-        console.error("Error loading CSV:", err);
+      // Update stat trackers
+      document.getElementById("total-current").textContent = currentVehicles.length;
+      document.getElementById("total-checkins").textContent = data.length;
+      document.getElementById("total-checkouts").textContent = data.filter(d => d["Actual Checkout Time"]).length;
+
+      // Chart for last 7 days
+      const last7Days = [];
+      const today = new Date();
+      for (let i = 6; i >= 0; i--) {
+        const d = new Date(today);
+        d.setDate(today.getDate() - i);
+        last7Days.push(d.toISOString().split('T')[0]);
       }
-    });
-  </script>
+
+      const checkinsCount = last7Days.map(date => 
+        data.filter(d => d["Actual Checkin Time"] && d["Actual Checkin Time"].startsWith(date)).length
+      );
+
+      const ctx = document.getElementById('checkinsChart');
+      new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels: last7Days,
+          datasets: [{
+            label: 'Check-Ins',
+            data: checkinsCount,
+            backgroundColor: '#007bff88',
+            borderColor: '#007bff',
+            borderWidth: 1
+          }]
+        },
+        options: {
+          responsive: true,
+          scales: {
+            y: { beginAtZero: true, title: { display: true, text: "Number of Check-Ins" } },
+            x: { title: { display: true, text: "Date" } }
+          }
+        }
+      });
+    },
+    error: function(err) {
+      console.error("Error loading CSV:", err);
+    }
+  });
+</script>
+
 </body>
 </html>
