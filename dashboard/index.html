@@ -182,7 +182,7 @@
       return (new Date(end) - new Date(start)) / 60000;
     }
 
-    Papa.parse("../data/data.csv", {
+    Papa.parse("../data/test_data.csv", {
       download: true,
       header: true,
       complete: function(results) {
