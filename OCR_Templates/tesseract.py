@@ -5,7 +5,7 @@ from PIL import Image
 # pytesseract.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract.exe'
 
 # Open the image
-img = Image.open('image_with_text.png')
+img = Image.open('/Users/trystan/Documents/GitHub/number-plate-check-in/tests/test_images/example4.png')
 
 # Perform OCR
 text = pytesseract.image_to_string(img)
