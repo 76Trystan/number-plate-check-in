@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Valet Check-In Dashboard</title>
+
+  <!-- Libraries -->
+  <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+
+  <!-- Styles -->
+  <style>
+    :root {
+      --bg: #f5f8fb;
+      --card-bg: #ffffff;
+      --primary: #007bff;
+      --text-dark: #222;
+      --text-light: #666;
+      --border: #ddd;
+      --radius: 12px;
+    }
+
+    body {
+      margin: 0;
+      font-family: 'Inter', Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text-dark);
+    }
+
+    header {
+      background: var(--primary);
+      color: white;
+      padding: 25px 40px;
+      text-align: center;
+      font-size: 1.8em;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    }
+
+    main {
+      max-width: 1200px;
+      margin: 40px auto;
+      padding: 0 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 30px;
+    }
+
+    .summary {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+      gap: 20px;
+    }
+
+    .card {
+      background: var(--card-bg);
+      border-radius: var(--radius);
+      padding: 20px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+      text-align: center;
+      transition: all 0.2s ease;
+    }
+
+    .card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    }
+
+    .card h2 {
+      margin: 8px 0 0;
+      font-size: 2em;
+      color: var(--primary);
+    }
+
+    .card p {
+      margin: 0;
+      color: var(--text-light);
+      font-size: 0.9em;
+    }
+
+    .chart-container {
+      background: var(--card-bg);
+      border-radius: var(--radius);
+      padding: 20px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+    }
+
+    .chart-container h3 {
+      margin-bottom: 10px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background: var(--card-bg);
+      border-radius: var(--radius);
+      overflow: hidden;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+    }
+
+    th, td {
+      padding: 12px 14px;
+      border-bottom: 1px solid var(--border);
+      text-align: left;
+    }
+
+    th {
+      background: var(--primary);
+      color: white;
+    }
+
+    tr:nth-child(even) td {
+      background: #f9f9f9;
+    }
+
+    tr:hover td {
+      background: #eef5ff;
+    }
+
+    @media (max-width: 700px) {
+      table, thead, tbody, th, td, tr {
+        display: block;
+      }
+      th {
+        display: none;
+      }
+      td {
+        display: flex;
+        justify-content: space-between;
+        border: none;
+        border-bottom: 1px solid var(--border);
+      }
+      td::before {
+        content: attr(data-label);
+        font-weight: bold;
+        color: var(--text-light);
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>Valet Check-In Dashboard</header>
+
+  <main>
+    <section class="summary">
+      <div class="card">
+        <p>Total Vehicles</p>
+        <h2 id="total-count">-</h2>
+      </div>
+      <div class="card">
+        <p>Average Check-in Delay (mins)</p>
+        <h2 id="avg-checkin-delay">-</h2>
+      </div>
+      <div class="card">
+        <p>Average Checkout Delay (mins)</p>
+        <h2 id="avg-checkout-delay">-</h2>
+      </div>
+      <div class="card">
+        <p>Longest Overstay (mins)</p>
+        <h2 id="max-overstay">-</h2>
+      </div>
+    </section>
+
+    <section class="chart-container">
+      <h3>Check-in Delay by Vehicle</h3>
+      <canvas id="delayChart"></canvas>
+    </section>
+
+    <section>
+      <h3>Detailed Valet Records</h3>
+      <table id="data-table">
+        <thead></thead>
+        <tbody></tbody>
+      </table>
+    </section>
+  </main>
+
+  <script>
+    function minutesDiff(start, end) {
+      return (new Date(end) - new Date(start)) / 60000;
+    }
+
+    Papa.parse("../data/data.csv", {
+      download: true,
+      header: true,
+      complete: function(results) {
+        const data = results.data.filter(r => r["License Plate"]);
+        const headers = Object.keys(data[0]);
+        const tableHead = document.querySelector("#data-table thead");
+        const tableBody = document.querySelector("#data-table tbody");
+
+        // Table headers
+        tableHead.innerHTML = "<tr>" + headers.map(h => `<th>${h}</th>`).join('') + "</tr>";
+
+        // Compute stats
+        const checkinDiffs = data.map(d => minutesDiff(d["Booked Checkin Time"], d["Actual Checkin Time"]));
+        const checkoutDiffs = data.map(d => minutesDiff(d["Scheduled Checkout Time"], d["Actual Checkout Time"]));
+
+        const avgCheckin = (checkinDiffs.reduce((a,b)=>a+b,0)/checkinDiffs.length).toFixed(1);
+        const avgCheckout = (checkoutDiffs.reduce((a,b)=>a+b,0)/checkoutDiffs.length).toFixed(1);
+        const maxOverstay = Math.max(...checkoutDiffs).toFixed(1);
+
+        document.getElementById("total-count").textContent = data.length;
+        document.getElementById("avg-checkin-delay").textContent = avgCheckin;
+        document.getElementById("avg-checkout-delay").textContent = avgCheckout;
+        document.getElementById("max-overstay").textContent = maxOverstay;
+
+        // Populate table
+        tableBody.innerHTML = data.map(row => {
+          return "<tr>" + headers.map(h => `<td data-label="${h}">${row[h]}</td>`).join('') + "</tr>";
+        }).join('');
+
+        // Chart
+        const ctx = document.getElementById('delayChart');
+        new Chart(ctx, {
+          type: 'bar',
+          data: {
+            labels: data.map(d => d["License Plate"]),
+            datasets: [{
+              label: 'Check-in Delay (mins)',
+              data: checkinDiffs,
+              backgroundColor: '#007bff88',
+              borderColor: '#007bff',
+              borderWidth: 1
+            }]
+          },
+          options: {
+            responsive: true,
+            scales: {
+              y: { beginAtZero: true, title: { display: true, text: "Delay (minutes)" } },
+              x: { title: { display: true, text: "License Plate" } }
+            }
+          }
+        });
+      },
+      error: function(err) {
+        console.error("Error loading CSV:", err);
+      }
+    });
+  </script>
+</body>
+</html>

@@ -62,7 +62,7 @@ print("Press 'p' to pause/unpause processing")
 print("="*50 + "\n")
 
 frame_count = 0
-process_every_n_frames = 5  # Process every 5th frame for performance
+process_every_n_frames = 3  # Process every 3rd frame for performance
 last_detected_plate = ""
 paused = False
 saved_plates = []
