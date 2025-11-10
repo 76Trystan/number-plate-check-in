@@ -12,17 +12,21 @@ def extract_text_from_image(image_path, show_steps=False):
     Returns:
         str: Extracted text from the image
     """
+    print("Loading image...")
     # Load the image
     image = cv2.imread(image_path)
     
     if image is None:
         raise ValueError(f"Could not load image from {image_path}")
     
+    print("Image loaded successfully")
+    
     # Convert to grayscale
     gray_image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+    print("Converted to grayscale")
     
     # Blur to reduce noise (bilateral filter preserves edges)
-    # Parameters: image, diameter of pixel neighborhood, sigmaColor, sigmaSpace
+    print("Applying bilateral filter...")
     blurred = cv2.bilateralFilter(gray_image, 11, 17, 17)
     
     if show_steps:
@@ -30,23 +34,28 @@ def extract_text_from_image(image_path, show_steps=False):
         cv2.imshow("Bilateral Filter", blurred)
     
     # Perform edge detection
+    print("Detecting edges...")
     edged = cv2.Canny(blurred, 170, 200)
     
     if show_steps:
         cv2.imshow("Canny Edges", edged)
     
     # Apply thresholding for OCR
+    print("Applying threshold...")
     _, processed_image = cv2.threshold(blurred, 150, 255, cv2.THRESH_BINARY)
     
     if show_steps:
         cv2.imshow("Thresholded", processed_image)
+        print("\n*** Press ANY KEY in the image windows to continue ***\n")
     
     # Perform OCR before releasing images
+    print("Running OCR...")
     extracted_text = pytesseract.image_to_string(processed_image)
+    print("OCR complete")
     
     # Show windows if requested, then clean up
     if show_steps:
-        cv2.waitKey(0)
+        cv2.waitKey(0)  # This waits for you to press a key!
         cv2.destroyAllWindows()
         cv2.waitKey(1)  # Extra cleanup for macOS
     
