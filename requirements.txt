@@ -1,0 +1,9 @@
+# OCR
+easyocr==1.6.2
+
+# Image processing
+opencv-python==4.8.1.78
+numpy==1.26.0
+
+# Optional: CSV / data handling
+pandas==2.1.1
