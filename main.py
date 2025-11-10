@@ -56,7 +56,7 @@ def append_to_csv(plate_text, csv_path):
 reader = easyocr.Reader(['en'], gpu=False)
 
 # Path to test image
-image_path = '/Users/trystan/Documents/GitHub/number-plate-check-in/tests/test_images/example1.jpg'
+image_path = '/Users/trystan/Documents/GitHub/number-plate-check-in/tests/test_images/example3.webp'
 
 # Path to output CSV
 csv_path = '/Users/trystan/Documents/GitHub/number-plate-check-in/data/data.csv'
