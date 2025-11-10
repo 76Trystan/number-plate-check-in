@@ -29,7 +29,7 @@ The MVP focuses on delivering the **core functionality** required to demonstrate
 
 ## Phases for Development
 
-### **Phase 1: Core Functionality (MVP Build)**
+### **Phase 1: Core Functionality (MVP Build) -> COMPLETED**
 **Goal:** Deliver a working end-to-end prototype.
 - Integrate OpenCV and EasyOCR for Optical Character Recognition (OCR).
 - Build REST API to handle plate recognition and logging.
