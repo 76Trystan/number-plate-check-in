@@ -230,7 +230,7 @@ def display_and_close(image_array, window_name='Processed Image'):
     cv2.waitKey(1)
 
 # Usage
-image_path = '/Users/trystan/Documents/GitHub/number-plate-check-in/tests/test_images/example3.webp'
+image_path = '/Users/trystan/Documents/GitHub/number-plate-check-in/tests/test_images/example5.png'
 
 # Set show_steps=True to see each processing step
 text, processed_image = extract_text_from_image(image_path, show_steps=True)
