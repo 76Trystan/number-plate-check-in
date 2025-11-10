@@ -9,7 +9,7 @@ def extract_text_from_image(image_path):
         image_path: Path to the image file
         
     Returns:
-        str: Extracted text from the image
+        tuple: (extracted_text, processed_image)
     """
     # Load the image
     image = cv2.imread(image_path)
@@ -26,10 +26,10 @@ def extract_text_from_image(image_path):
     # Perform OCR
     extracted_text = pytesseract.image_to_string(processed_image)
     
-    # Clean up - release image from memory
-    del image, gray_image, processed_image
+    # Clean up intermediate images from memory
+    del image, gray_image
     
-    return extracted_text
+    return extracted_text, processed_image
 
 def display_and_close(image_array, window_name='Processed Image'):
     """
@@ -37,14 +37,21 @@ def display_and_close(image_array, window_name='Processed Image'):
     Ensures proper cleanup of display windows.
     """
     cv2.imshow(window_name, image_array)
+    print(f"\nDisplaying '{window_name}' - Press any key in the image window to close it")
     cv2.waitKey(0)
     cv2.destroyAllWindows()
     # Extra cleanup for macOS
     cv2.waitKey(1)
 
 # Usage
-image_path = '/Users/trystan/Documents/GitHub/number-plate-check-in/tests/test_images/example3.webp'
+image_path = '/Users/trystan/Documents/GitHub/number-plate-check-in/tests/test_images/example1.jpg'
 
-text = extract_text_from_image(image_path)
+text, processed_image = extract_text_from_image(image_path)
 print("Extracted Text:")
 print(text)
+
+# Display the processed image
+display_and_close(processed_image, 'Processed Image')
+
+# Clean up processed image after display
+del processed_image
