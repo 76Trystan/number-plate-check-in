@@ -45,7 +45,29 @@ def is_likely_plate(text, min_length=5, max_length=8):
 reader = easyocr.Reader(['en'], gpu=False)
 
 # Path to your image
-image_path = '/Users/trystan/Documents/GitHub/number-plate-check-in/tests/test_images/example2.avif'
+image_path = '/Users/trystan/Documents/GitHub/number-plate-check-in/tests/test_images/example7.jpg'
+
+# Try multiple approaches for best results
+print("=" * 50)
+print("METHOD 1: Original image")
+print("=" * 50)
+result1 = reader.readtext(
+    image_path,
+    allowlist='ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789',
+    paragraph=False,
+    width_ths=0.7,  # Adjust word grouping
+    contrast_ths=0.1,  # Lower threshold for low contrast text
+    adjust_contrast=0.5  # Enhance contrast
+)
+
+print("All detected text:")
+print("-" * 50)
+for (bbox, text, prob) in result1:
+    print(f"Text: {text:15s} | Confidence: {prob:.2f}")
+
+print("\n" + "=" * 50)
+print("METHOD 2: Preprocessed image")
+print("=" * 50)
 
 # Option 1: Use preprocessed image for better results
 preprocessed = preprocess_image(image_path)
@@ -64,11 +86,14 @@ print("-" * 50)
 
 plate_candidates = []
 
-for (bbox, text, prob) in result:
+# Combine results from both methods
+all_results = result1 + result
+
+for (bbox, text, prob) in all_results:
     print(f"Text: {text:15s} | Confidence: {prob:.2f}")
     
     # Filter for likely license plates
-    if is_likely_plate(text) and prob > 0.3:  # Lowered threshold for detection
+    if is_likely_plate(text) and prob > 0.5:  # Lowered threshold for detection
         cleaned = clean_plate_text(text)
         plate_candidates.append((cleaned, prob))
 
