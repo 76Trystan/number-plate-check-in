@@ -113,10 +113,12 @@ This is a basic test which inlcudes a photo of a number plate which is directly 
 <img src="docs/example3.webp" width="500" alt="Static Test Image">
 *The number plate image used for testing the program.*
 
+---
 
 <img src="docs/run_demo.png" width="500" alt="Terminal Output">
 *Terminal output showing result and confidence reading (0-1).*
 
+---
 
 <img src="docs/ui_demo.png" width="500" alt="Terminal Output">
 *The final output on the UI. As you can see it shows a very basic documentation as a part of Phase 1.*
