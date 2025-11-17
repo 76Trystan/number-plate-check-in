@@ -97,7 +97,7 @@ The MVP focuses on delivering the **core functionality** required to demonstrate
 - **Libraries:** OpenCV, EasyOCR, SQLAlchemy (Possibly implement YOLOv8) 
 - **Database:** SQLite (MVP), PostgreSQL (Production)  
 - **Deployment:** Docker
-- **UI Tools:** TailwindCSS, Chart.js (for analytics)  
+- **UI Tools:** Chart.js
 
 ---
 ## Demonstration
@@ -106,7 +106,7 @@ Demonstration of both static image and live images.
 
 ---
 
-### Static Image Demonstration
+### Static Image Demonstration -> PHASE 1
 
 This is a basic test which inlcudes a photo of a number plate which is directly injected into the program as a test case.
 
@@ -122,6 +122,10 @@ This is a basic test which inlcudes a photo of a number plate which is directly 
 
 <img src="docs/ui_demo.png" width="500" alt="Terminal Output">
 *The final output on the UI. As you can see it shows a very basic documentation as a part of Phase 1.*
+
+---
+
+### Live Image Demonstration -> PHASE 1
 
 ---
 
