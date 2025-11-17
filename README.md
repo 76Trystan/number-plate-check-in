@@ -106,12 +106,13 @@ Demonstration of both static image and live images.
 
 ### Static Image Demonstration
 
+Here shows a demo image being processed through the program (example3.webp)
 
+![Test image used] (docs/example3.webp)
 
+![Result of OCR program] (docs/example3.webp)
 
-
-
-
+![Output on the interface] (docs/example3.webp)
 
 ---
 ## License
