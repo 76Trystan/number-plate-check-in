@@ -1,7 +1,7 @@
 # Automatic Number Plate Recognition (ANPR) Check-In System
 
 ## Introduction
-The **Automatic Number Plate Recognition (ANPR) Check-In System** is a computer vision–powered solution designed for **valet and parking services** to automate vehicle identification and streamline the check-in process.
+The **Automatic Number Plate Recognition (ANPR) Check-In System** is a computer vision–powered solution designed for **valet and parking services** to automate vehicle identification and fast track the checki-in process
 
 By using cameras and machine learning–based OCR (Optical Character Recognition), the system can automatically detect, read, and log vehicle license plates upon entry or exit. This replaces manual ticketing and data entry, reducing errors, improving speed, and enabling a more contactless experience for customers.
 
