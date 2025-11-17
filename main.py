@@ -59,7 +59,7 @@ reader = easyocr.Reader(['en'], gpu=False)
 image_path = '/Users/trystan/Documents/GitHub/number-plate-check-in/tests/test_images/example3.webp'
 
 # Path to output CSV
-csv_path = '/Users/trystan/Documents/GitHub/number-plate-check-in/data/data.csv'
+csv_path = '/Users/trystan/Documents/GitHub/number-plate-check-in/dashboard/public/data/data.csv' # Path to output CSV for local use only
 
 # Read with OCR
 print("=" * 50)

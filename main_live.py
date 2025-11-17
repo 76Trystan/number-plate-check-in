@@ -72,7 +72,7 @@ reader = easyocr.Reader(['en'], gpu=False)
 print("OCR reader ready!")
 
 # Path to output CSV
-csv_path = 'data/data_live.csv'
+csv_path = '/Users/trystan/Documents/GitHub/number-plate-check-in/dashboard/public/data/data.csv' # Path to output CSV for local use only
 
 # Open webcam
 cap = cv2.VideoCapture(0)
