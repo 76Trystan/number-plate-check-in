@@ -100,7 +100,19 @@ The MVP focuses on delivering the **core functionality** required to demonstrate
 - **UI Tools:** TailwindCSS, Chart.js (for analytics)  
 
 ---
+## Demonstration
+
+Demonstration of both static image and live images.
+
+### Static Image Demonstration
 
 
+
+
+
+
+
+
+---
 ## License
 Licensed under the **MIT License**. Free to use, modify, and distribute.

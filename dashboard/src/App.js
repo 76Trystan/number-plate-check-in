@@ -13,7 +13,7 @@ function App() {
   const [chartData, setChartData] = useState({ labels: [], data: [] });
 
   useEffect(() => {
-    const csvPath = "/data/data_live.csv"; // adjust if needed
+    const csvPath = "/data/data.csv"; // adjust if needed
 
     function calculateDuration(checkinTime) {
       if (!checkinTime) return "-";
