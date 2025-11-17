@@ -7,6 +7,10 @@ By using cameras and machine learning–based OCR (Optical Character Recognition
 
 The project aims to create a scalable and modular platform that can be deployed across different environments.
 
+### Design Problem
+
+My Name is Trystan, I am currently studying to become a software engineer. During my studies I work part time at a very busy valet. From my perspective as an emploee, the Valet's current check-in system is old and obsolete, as an engineer I decided to create a functional program that could be implemented seamlessly and provide a more efficient checkin system for both Customer & Employee.
+
 ---
 
 ## Minimum Viable Product (MVP)
@@ -97,11 +101,6 @@ The MVP focuses on delivering the **core functionality** required to demonstrate
 
 ---
 
-## About Me
-
-My Name is Trystan, I am currently studying to become a software engineer. During my studies I work part time at a very busy valet, over the years of working there, the company in charge has always tried various methods to create a fast an efficient environment for both customer and attendant . However, with each attempt, they have never full addressed the efficienty side of things. This project is designed to address all user/customer requirements for a fully functional and efficient check in system.
-
----
 
 ## License
 Licensed under the **MIT License**. Free to use, modify, and distribute.
