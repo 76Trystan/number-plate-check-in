@@ -9,7 +9,7 @@ The project aims to create a scalable and modular platform that can be deployed 
 
 ### Design Problem
 
-My Name is Trystan, I am currently studying to become a software engineer. During my studies I work part time at a very busy valet. From my perspective as an emploee, the Valet's current check-in system is old and obsolete, as an engineer I decided to create a functional program that could be implemented seamlessly and provide a more efficient checkin system for both Customer & Employee.
+Valet operations face a serious bottleneck at check-in, where outdated and manual systems slow down service, increase errors, and create friction for both customers and staff. An automatic number plate detection system addresses this by streamlining vehicle identification, reducing wait times, and improving accuracy. The goal is a seamless, efficient check-in experience that modernises valet workflows while enhancing overall service quality.
 
 ---
 
